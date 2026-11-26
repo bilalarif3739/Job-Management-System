@@ -19,9 +19,6 @@ return Application::configure(basePath: dirname(__DIR__))
         api: [
             __DIR__ . '/../routes/Api/auth.php',
             __DIR__ . '/../routes/Api/profile.php',
-            __DIR__ . '/../routes/Api/conversations.php',
-            __DIR__ . '/../routes/Api/models.php',
-            __DIR__ . '/../routes/Api/library_projects.php',
         ],
         commands: __DIR__ . '/../routes/console.php',
         health: '/up',

@@ -134,11 +134,6 @@ class ProfileController extends Controller
         }
 
         DB::transaction(function () use ($user): void {
-            $user->conversations()->with('messages')->get()->each(function ($conversation): void {
-                $conversation->messages()->delete();
-                $conversation->delete();
-            });
-
             UserToken::where('user_id', $user->id)->delete();
             $user->forceFill([
                 'remembertoken' => null,

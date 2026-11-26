@@ -3,8 +3,6 @@
 namespace Tests\Feature;
 
 use App\Http\Middleware\AuthToken;
-use App\Models\ChatMessage;
-use App\Models\Conversation;
 use App\Models\User;
 use App\Models\UserToken;
 use Illuminate\Database\Schema\Blueprint;
@@ -35,24 +33,6 @@ class ProfileApiTest extends TestCase
             $table->string('role');
             $table->string('remembertoken')->nullable();
             $table->unsignedBigInteger('last_activity')->nullable();
-            $table->timestamps();
-            $table->softDeletes();
-        });
-
-        Schema::connection('sqlite')->create('conversations', function (Blueprint $table): void {
-            $table->id();
-            $table->foreignId('user_id');
-            $table->string('title')->nullable();
-            $table->timestamps();
-            $table->softDeletes();
-        });
-
-        Schema::connection('sqlite')->create('chat_messages', function (Blueprint $table): void {
-            $table->id();
-            $table->foreignId('conversation_id');
-            $table->string('role', 20);
-            $table->longText('content');
-            $table->string('model_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -156,13 +136,6 @@ class ProfileApiTest extends TestCase
         $user->profile_picture_path = $picturePath;
         $user->save();
 
-        $conversation = $user->conversations()->create(['title' => 'Keep these rows']);
-        $conversation->messages()->create([
-            'role' => 'user',
-            'content' => 'Keep this row',
-            'model_id' => 'provider/model:free',
-        ]);
-
         $plainToken = 'test-profile-delete-token';
         UserToken::query()->create([
             'user_id' => $user->id,
@@ -177,11 +150,6 @@ class ProfileApiTest extends TestCase
             ->assertOk();
 
         $this->assertNotNull(User::withTrashed()->findOrFail($user->id)->deleted_at);
-        $this->assertNotNull(Conversation::withTrashed()->findOrFail($conversation->id)->deleted_at);
-        $this->assertSame(
-            1,
-            ChatMessage::withTrashed()->where('conversation_id', $conversation->id)->whereNotNull('deleted_at')->count()
-        );
         $this->assertSame(0, UserToken::query()->where('user_id', $user->id)->count());
         Storage::disk('public')->assertMissing($picturePath);
 

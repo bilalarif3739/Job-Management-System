@@ -4,31 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\InvalidCredentialsException;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\InvitationRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
-use App\Http\Requests\UserProfilePicRequest;
 use App\Http\Resources\RegistrationResource;
-use App\Http\Resources\UserResource;
-use App\Models\Company;
 use App\Models\EmailInvitation;
 use App\Models\PasswordReset;
 use App\Models\User;
-use App\Models\UserRoles;
 use App\Services\RegistrationService;
 use App\Services\TokenService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\Password;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Storage;
 
 class AuthController extends Controller
 {
-    use Notifiable;
-
     public function __construct(
         private RegistrationService $registrationService,
         private TokenService $tokenService,

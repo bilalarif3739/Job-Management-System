@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\InvalidCredentialsException;
 use App\Jobs\EmailJob;
-use App\Models\Company;
 use App\Models\EmailInvitation;
 use App\Models\User;
 use App\Services\EmailService;
