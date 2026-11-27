@@ -35,9 +35,6 @@ class AuthController extends Controller
     ) {
     }
 
-
-
-
     //  * * POST /api/register
 
 
@@ -102,8 +99,6 @@ class AuthController extends Controller
             'user' => new RegistrationResource($request->user()),
         ]);
     }
-
-
 
 
     /**
@@ -210,8 +205,4 @@ class AuthController extends Controller
         );
 
     }
-
-
-
-
 }
